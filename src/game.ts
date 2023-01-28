@@ -10,7 +10,7 @@ export type Position = {
     y: number
 };
 
-function isCloning(origin: Position, destination: Position): boolean {
+export function isCloning(origin: Position, destination: Position): boolean {
     return Math.abs(origin.y - destination.y) <= 1 && Math.abs(origin.x - destination.x) <= 1;
 }
 
@@ -22,7 +22,7 @@ export class Board extends Array<Array<TileType>>
         }
     }
 
-    isAPositionOnBoard(point: Position): boolean {
+    isOnBoard(point: Position): boolean {
         if (point.x % 1 !== 0 || point.y % 1 !== 0) {
             return false; // not an integer
         }
@@ -41,7 +41,7 @@ export class Board extends Array<Array<TileType>>
     }
 
     isLegalMove(origin: Position, destination: Position): boolean {
-        if (! this.isAPositionOnBoard(origin) || ! this.isAPositionOnBoard(destination)) {
+        if (! this.isOnBoard(origin) || ! this.isOnBoard(destination)) {
             return false; // position not on board
         }
         if (origin.x == destination.x && origin.y == destination.y) {
@@ -85,7 +85,7 @@ export class Board extends Array<Array<TileType>>
         for (let x = destination.x - 1 ; x <= (destination.x + 1) ; ++x) {
             for (let y = destination.y - 1 ; y <= (destination.y + 1) ; ++y) {
                 let pos = {x, y}
-                if (this.isAPositionOnBoard(pos) && this.isAPlayerTile(pos)) {
+                if (this.isOnBoard(pos) && this.isAPlayerTile(pos)) {
                     this[y][x] = playerTile;
                 }
             }

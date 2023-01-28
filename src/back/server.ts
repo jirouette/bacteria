@@ -1,12 +1,7 @@
-import { Board, TileType } from '../game.js';
+import { parseBoard } from '../formats.js';
+import { TileType } from '../game.js';
 
-const board = new Board(
-    [TileType.EMPTY, TileType.EMPTY, TileType.EMPTY, TileType.EMPTY],
-    [TileType.WALL, TileType.WALL, TileType.WALL, TileType.WALL],
-    [TileType.EMPTY, TileType.PLAYER_A, TileType.EMPTY, TileType.EMPTY],
-    [TileType.EMPTY, TileType.EMPTY, TileType.PLAYER_B, TileType.EMPTY],
-    [TileType.WALL, TileType.WALL, TileType.WALL, TileType.WALL]
-);
+const board = parseBoard("00001 11111 02001 00301 11111");
 
 console.log(board);
 
