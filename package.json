@@ -23,7 +23,9 @@
     "@types/react": "^18.0.26",
     "@types/react-dom": "^18.0.10",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "shortid": "^2.2.16",
+    "socket.io": "^4.5.4"
   },
   "browserslist": {
     "production": [

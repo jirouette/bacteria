@@ -1,3 +1,6 @@
+import { maps } from "./maps.js";
+import { parseBoard } from "./formats.js";
+
 export enum TileType {
     EMPTY = 0,
     WALL,
@@ -9,6 +12,13 @@ export type Position = {
     x: number,
     y: number
 };
+
+export type Move = {
+    origin: Position, 
+    destination: Position
+};
+
+export type Player = TileType.PLAYER_A|TileType.PLAYER_B;
 
 export function isCloning(origin: Position, destination: Position): boolean {
     return Math.abs(origin.y - destination.y) <= 1 && Math.abs(origin.x - destination.x) <= 1;
@@ -70,20 +80,20 @@ export class Board extends Array<Array<TileType>>
         return true; // any other case is legal
     }
 
-    applyMove(origin: Position, destination: Position): boolean {
-        if (! this.isLegalMove(origin, destination)) {
+    applyMove(move: Move): boolean {
+        if (! this.isLegalMove(move.origin, move.destination)) {
             return false; // cannot apply illegal move
         }
     
-        let playerTile = this[origin.y][origin.x];
-        if (! isCloning(origin, destination)) {
+        let playerTile = this[move.origin.y][move.origin.x];
+        if (! isCloning(move.origin, move.destination)) {
             // the bacteria is jumping, so its previous position is now empty
-            this[origin.y][origin.x] = TileType.EMPTY;
+            this[move.origin.y][move.origin.x] = TileType.EMPTY;
         }
     
-        this[destination.y][destination.x] = playerTile;
-        for (let x = destination.x - 1 ; x <= (destination.x + 1) ; ++x) {
-            for (let y = destination.y - 1 ; y <= (destination.y + 1) ; ++y) {
+        this[move.destination.y][move.destination.x] = playerTile;
+        for (let x = move.destination.x - 1 ; x <= (move.destination.x + 1) ; ++x) {
+            for (let y = move.destination.y - 1 ; y <= (move.destination.y + 1) ; ++y) {
                 let pos = {x, y}
                 if (this.isOnBoard(pos) && this.isAPlayerTile(pos)) {
                     this[y][x] = playerTile;
@@ -93,7 +103,7 @@ export class Board extends Array<Array<TileType>>
         return true; // move applied
     }
 
-    canAPlayerStillPlay(player: TileType.PLAYER_A|TileType.PLAYER_B): boolean {
+    canAPlayerStillPlay(player: Player): boolean {
         for (let y = 0 ; y < this.length ; ++y) {
             for (let x = 0 ; x < this[y].length ; ++x) {
                 let tile = this[y][x];
@@ -113,11 +123,52 @@ export class Board extends Array<Array<TileType>>
         return false; // no legal move found
     }
     
-    scoreOfPlayer(player: TileType.PLAYER_A|TileType.PLAYER_B): number {
+    scoreOfPlayer(player: Player): number {
         return this.reduce((sum, layer) => sum + layer.filter(tile => tile == player).length, 0);
     }
 
     isGameFinished(): boolean {
         return ! this.canAPlayerStillPlay(TileType.PLAYER_A) || ! this.canAPlayerStillPlay(TileType.PLAYER_B);
     }
+}
+
+export class Game {
+    moves: Array<Move|null> = [];
+    board: Board;
+    turn_player: Player;
+
+    constructor(board: Board, first_turn?: Player) {
+        this.board = board;
+        if (! first_turn) {
+            first_turn = [TileType.PLAYER_A, TileType.PLAYER_B][Math.floor(Math.random() * 2)] as Player;
+        }
+        this.turn_player = first_turn;
+    }
+
+    applyMove(move?: Move, player?: Player): boolean {
+        if (this.turn_player && this.turn_player !== player) {
+            return false;
+        }
+        this.moves.push(move ? move : null);
+        if (! move) {
+            return true;
+        }
+        return this.board.applyMove(move);
+    }
+
+    scores(): Array<number> {
+        return [
+            this.board.scoreOfPlayer(TileType.PLAYER_A),
+            this.board.scoreOfPlayer(TileType.PLAYER_B)
+        ];
+    }
+
+    isFinished(): boolean {
+        return this.board.isGameFinished();
+    }
+}
+
+export function randomBoard(): Board {
+    const map = maps[Math.floor(Math.random() * maps.length)];
+    return parseBoard(map);
 }
