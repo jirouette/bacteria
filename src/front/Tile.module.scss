@@ -1,0 +1,35 @@
+.tile {
+    width: 100px;
+    height: 100px;
+    padding: 0;
+    margin: 0;
+    border: 0;
+}
+
+.playerA {
+    background-color: red;
+}
+
+.playerB {
+    background-color: green;
+}
+
+.wall {
+    background-color: black;
+}
+
+.empty {
+    background-color: beige;
+}
+
+.playable {
+    cursor: pointer;
+}
+
+.movable {
+    background-color: rgb(48, 48, 43);
+}
+
+.jumpable {
+    background-color: grey;
+}

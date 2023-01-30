@@ -14,15 +14,17 @@
       "strict": true,
       "forceConsistentCasingInFileNames": true,
       "noFallthroughCasesInSwitch": true,
-      "module": "esnext",
+      "module": "CommonJS",
       "moduleResolution": "node",
       "resolveJsonModule": true,
       "isolatedModules": true,
       "noEmit": false,
       "jsx": "react-jsx",
-      "sourceMap": true
+      "sourceMap": true,
+      "plugins": [{ "name": "typescript-plugin-css-modules" }]
     },
     "include": [
-      "./src/**/*.ts"
+      "./src/**/*.ts",
+      "./src/**/*.css"
     ],
-  }
+}

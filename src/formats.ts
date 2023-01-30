@@ -1,4 +1,5 @@
-import { Board, TileType } from './game.js';
+import { Board, TileType } from './game';
+import { maps } from './maps';
 
 function parseRow(sequence: string): Array<TileType> {
     let row: Array<TileType> = [];
@@ -21,4 +22,9 @@ export function parseBoard(sequence: string): Board {
 
     // @ts-ignore
     return new Board(...rows);
+}
+
+export function randomBoard(): Board {
+    const map = maps[Math.floor(Math.random() * maps.length)];
+    return parseBoard(map);
 }

@@ -1,6 +1,3 @@
-import { maps } from "./maps.js";
-import { parseBoard } from "./formats.js";
-
 export enum TileType {
     EMPTY = 0,
     WALL,
@@ -13,15 +10,24 @@ export type Position = {
     y: number
 };
 
-export type Move = {
+export type Move = null | {
     origin: Position, 
     destination: Position
 };
 
 export type Player = TileType.PLAYER_A|TileType.PLAYER_B;
 
-export function isCloning(origin: Position, destination: Position): boolean {
-    return Math.abs(origin.y - destination.y) <= 1 && Math.abs(origin.x - destination.x) <= 1;
+export function isCloning(move: Move): boolean {
+    return move !== null && Math.abs(move.origin.y - move.destination.y) <= 1 && Math.abs(move.origin.x - move.destination.x) <= 1;
+}
+
+export function isJumping(move: Move): boolean {
+    if (! move) {
+        return false;
+    }
+    let yDist = Math.abs(move.origin.y - move.destination.y);
+    let xDist = Math.abs(move.origin.x - move.destination.x);
+    return (yDist == 2 && xDist == 0) || (yDist == 0 && xDist == 2);
 }
 
 export class Board extends Array<Array<TileType>>
@@ -50,26 +56,23 @@ export class Board extends Array<Array<TileType>>
         return tile == TileType.PLAYER_A || tile == TileType.PLAYER_B;
     }
 
-    isLegalMove(origin: Position, destination: Position): boolean {
-        if (! this.isOnBoard(origin) || ! this.isOnBoard(destination)) {
+    isLegalMove(move: Move): boolean {
+        if (! move) {
+            return false;
+        }
+        if (! this.isOnBoard(move.origin) || ! this.isOnBoard(move.destination)) {
             return false; // position not on board
         }
-        if (origin.x == destination.x && origin.y == destination.y) {
+        if (move.origin.x == move.destination.x && move.origin.y == move.destination.y) {
             return false; // same position
         }
-        if (origin.x != destination.x && origin.y != destination.y) {
-            return false; // move on both axis
-        }
-        
-        const differenceY = Math.abs(origin.y - destination.y);
-        const differenceX = Math.abs(origin.y - destination.x);
     
-        if (differenceX > 2 && differenceY > 2) {
+        if (! isCloning(move) && ! isJumping(move) ) {
             return false; // destination is not reachable by cloning (1) nor by jumping (2)
         }
     
-        const originTile = this[origin.y][origin.x];
-        const destinationTile = this[destination.y][destination.x];
+        const originTile = this[move.origin.y][move.origin.x];
+        const destinationTile = this[move.destination.y][move.destination.x];
         if (originTile != TileType.PLAYER_A && originTile != TileType.PLAYER_B) {
             return false; // origin is not a player tile
         }
@@ -81,12 +84,15 @@ export class Board extends Array<Array<TileType>>
     }
 
     applyMove(move: Move): boolean {
-        if (! this.isLegalMove(move.origin, move.destination)) {
+        if (! move) {
+            return false;
+        }
+        if (! this.isLegalMove(move)) {
             return false; // cannot apply illegal move
         }
     
         let playerTile = this[move.origin.y][move.origin.x];
-        if (! isCloning(move.origin, move.destination)) {
+        if (! isCloning(move)) {
             // the bacteria is jumping, so its previous position is now empty
             this[move.origin.y][move.origin.x] = TileType.EMPTY;
         }
@@ -113,7 +119,7 @@ export class Board extends Array<Array<TileType>>
     
                 for (let moveX = x - 1 ; moveX <= (x + 1) ; ++moveX) {
                     for (let moveY = y - 1 ; moveY <= (y + 1) ; ++moveY) {
-                        if (this.isLegalMove({x, y}, {x: moveX, y: moveY})) {
+                        if (this.isLegalMove({origin: {x, y}, destination: {x: moveX, y: moveY}})) {
                             return true; // a legal move is found
                         }
                     }
@@ -133,9 +139,10 @@ export class Board extends Array<Array<TileType>>
 }
 
 export class Game {
-    moves: Array<Move|null> = [];
+    moves: Array<Move> = [];
     board: Board;
     turn_player: Player;
+    players: Array<any> = [];
 
     constructor(board: Board, first_turn?: Player) {
         this.board = board;
@@ -145,15 +152,43 @@ export class Game {
         this.turn_player = first_turn;
     }
 
-    applyMove(move?: Move, player?: Player): boolean {
-        if (this.turn_player && this.turn_player !== player) {
+    addPlayer(player: any): Player|null {
+        if (this.canStart()) {
+            return null;
+        }
+        this.players.push(player);
+        return this.canStart() ? TileType.PLAYER_B : TileType.PLAYER_A;
+    }
+
+    canStart(): boolean {
+        return this.players.length >= 2;
+    }
+
+    isTurnPlayer(player: any): boolean {
+        if (! this.canStart()) {
             return false;
         }
-        this.moves.push(move ? move : null);
+        return this.players[Number(this.turn_player !== TileType.PLAYER_A)] === player;
+    }
+
+    swapTurnPlayer() {
+        this.turn_player = this.turn_player == TileType.PLAYER_A ? TileType.PLAYER_B : TileType.PLAYER_A;
+    }
+
+    applyMove(move: Move, player: any): boolean {
+        if (! this.isTurnPlayer(player)) {
+            return false;
+        }
+        this.moves.push(move);
         if (! move) {
+            this.swapTurnPlayer();
             return true;
         }
-        return this.board.applyMove(move);
+        if (! this.board.applyMove(move)) {
+            return false;
+        }
+        this.swapTurnPlayer();
+        return true;
     }
 
     scores(): Array<number> {
@@ -168,7 +203,4 @@ export class Game {
     }
 }
 
-export function randomBoard(): Board {
-    const map = maps[Math.floor(Math.random() * maps.length)];
-    return parseBoard(map);
-}
+
