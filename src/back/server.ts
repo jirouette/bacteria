@@ -1,9 +1,11 @@
 import { Game, Move } from '../game.js';
 import { ClientToServerEvents, ServerToClientEvents, SocketData } from '../socket.js';
 import { Server } from 'socket.io';
-import { generate } from 'shortid';
+import { generate, characters } from 'shortid';
 import { createServer } from "http";
 import { randomBoard } from '../formats.js';
+
+characters('123456789abcdefghijkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ'); // removing l, I, 0, o and O
 
 var games: {[key: string]: Game} = {};
 
