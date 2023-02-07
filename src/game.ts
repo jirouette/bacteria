@@ -17,6 +17,10 @@ export type Move = null | {
 
 export type Player = TileType.PLAYER_A|TileType.PLAYER_B;
 
+export function isTilePlayer(tile: TileType): boolean {
+    return tile == TileType.PLAYER_A || tile == TileType.PLAYER_B;
+}
+
 export function isCloning(move: Move): boolean {
     return move !== null && Math.abs(move.origin.y - move.destination.y) <= 1 && Math.abs(move.origin.x - move.destination.x) <= 1;
 }
@@ -109,6 +113,18 @@ export class Board extends Array<Array<TileType>>
         return true; // move applied
     }
 
+    nbPlayPossible(pos: Position): number {
+        let nbPlay = 0;
+        for (let moveX = pos.x - 2 ; moveX <= (pos.x + 2) ; ++moveX) {
+            for (let moveY = pos.y - 2 ; moveY <= (pos.y + 2) ; ++moveY) {
+                if (this.isLegalMove({origin: pos, destination: {x: moveX, y: moveY}})) {
+                    nbPlay++;
+                }
+            }
+        }
+        return nbPlay;
+    }
+
     canAPlayerStillPlay(player: Player): boolean {
         for (let y = 0 ; y < this.length ; ++y) {
             for (let x = 0 ; x < this[y].length ; ++x) {
@@ -116,13 +132,9 @@ export class Board extends Array<Array<TileType>>
                 if (tile != player) {
                     continue; // tile does not belong to the player
                 }
-    
-                for (let moveX = x - 1 ; moveX <= (x + 1) ; ++moveX) {
-                    for (let moveY = y - 1 ; moveY <= (y + 1) ; ++moveY) {
-                        if (this.isLegalMove({origin: {x, y}, destination: {x: moveX, y: moveY}})) {
-                            return true; // a legal move is found
-                        }
-                    }
+
+                if (this.nbPlayPossible({x, y}) > 0) {
+                    return true; // a legal move is found
                 }
             }
         }
