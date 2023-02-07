@@ -214,5 +214,3 @@ export class Game {
         return this.board.isGameFinished();
     }
 }
-
-

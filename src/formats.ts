@@ -19,8 +19,6 @@ export function parseBoard(sequence: string): Board {
     for (let i = 0 ; i < size ; ++i) {
         rows.push(parseRow(trimmed_sequence.slice(i*size, i*size+size)));
     }
-
-    // @ts-ignore
     return new Board(...rows);
 }
 

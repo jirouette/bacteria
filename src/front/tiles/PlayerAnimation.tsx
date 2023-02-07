@@ -1,10 +1,10 @@
 import React from "react";
 import { Player, TileType } from "../../game";
+import { Mood } from "./Mood";
 // @ts-ignore
 import P1 from './assets/P1.png';
 // @ts-ignore
 import P2 from './assets/P2.png';
-import { Mood } from "./Mood";
 
 interface Props {
     type: Player;
