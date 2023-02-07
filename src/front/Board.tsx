@@ -34,8 +34,8 @@ export function Board() {
             selectTile({x, y});
             return true;
         }
-        // @ts-ignore
-        if (selectedTile.x == x && selectedTile.y == y) {
+        const confirmedSelectedTile = selectedTile as Position;
+        if (confirmedSelectedTile.x == x && confirmedSelectedTile.y == y) {
             return true;
         }
         if (board[y][x] !== TileType.EMPTY) {
@@ -43,11 +43,9 @@ export function Board() {
         }
 
         // checking now if we can perform a move
-
-        // @ts-ignore
-        let move: Move = {origin: selectedTile, destination: {x, y}}
+        let move: Move = {origin: confirmedSelectedTile, destination: {x, y}}
         if (! isCloning(move) && ! isJumping(move)) {
-            return false; 
+            return false;
         }
 
         client.emit('applyMove', move);
@@ -72,13 +70,14 @@ export function Board() {
             {(board.map((row, y) => {
                 return <div className="row" key={y}>{row.map((tile, x) => {
                     return (<Tile
+                        key={`${x}-${y}`}
                         type={tile}
                         player={player}
                         turnPlayer={turnPlayer}
-                        key={String(x)+"-"+String(y)}
                         movable={selectedTile && isCloning({origin: selectedTile, destination: {x, y}})}
                         jumpable={selectedTile && isJumping({origin: selectedTile, destination: {x, y}})}
                         onClick={() => {return onClick(x, y);}}
+                        playScore={board.nbPlayPossible({x, y})}
                     />);
                 })}</div>
             }))}

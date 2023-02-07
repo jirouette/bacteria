@@ -6,20 +6,20 @@
     border: 0;
 }
 
-.playerA {
-    background-color: red;
-}
-
-.playerB {
-    background-color: green;
-}
-
 .wall {
     background-color: black;
+    display: block;
+    width: 58.5px;
+    height: 69px;
+    margin: auto;
 }
 
 .empty {
     background-color: beige;
+    display: block;
+    width: 58.5px;
+    height: 69px;
+    margin: auto;
 }
 
 .playable {
