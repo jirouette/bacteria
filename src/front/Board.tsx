@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { client } from './client';
 import { Board as GameBoard, isCloning, isJumping, Move, Player, Position, TileType } from '../game';
 import { Tile } from "./Tile";
+// @ts-ignore
+import styles from "./Board.module.scss";
 
 export function Board() {
     const [board, setBoard] = useState(new GameBoard);
@@ -68,7 +70,7 @@ export function Board() {
     return (
         <div id="board">
             {(board.map((row, y) => {
-                return <div className="row" key={y}>{row.map((tile, x) => {
+                return <div className={styles.row} key={y}>{row.map((tile, x) => {
                     return (<Tile
                         key={`${x}-${y}`}
                         type={tile}
@@ -78,6 +80,7 @@ export function Board() {
                         jumpable={selectedTile && isJumping({origin: selectedTile, destination: {x, y}})}
                         onClick={() => {return onClick(x, y);}}
                         playScore={board.nbPlayPossible({x, y})}
+                        style={{left: `${x*100}px`}}
                     />);
                 })}</div>
             }))}

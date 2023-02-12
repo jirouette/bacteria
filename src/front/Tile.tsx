@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { isTilePlayer, Player, TileType } from "../game";
-import { PlayerAnimation } from "./tiles/PlayerAnimation";
+import { Player, TileType } from "../game";
+import { Character } from "./tiles/Character";
 // @ts-ignore
 import styles from "./Tile.module.scss";
 
@@ -12,9 +12,10 @@ interface Props {
     jumpable: boolean|null;
     onClick: () => boolean;
     playScore: number;
+    style: React.CSSProperties
 }
 
-export function Tile({type, player, turnPlayer, movable, jumpable, onClick, playScore}: Props) {
+export function Tile({type, player, turnPlayer, movable, jumpable, onClick, playScore, style}: Props) {
     const [tilePlayScore, setPlayScore] = useState(-1);
     const [tileType, setTileType] = useState(type);
 
@@ -27,6 +28,7 @@ export function Tile({type, player, turnPlayer, movable, jumpable, onClick, play
         switch(tile) {
             case TileType.EMPTY: return styles.empty;
             case TileType.WALL: return styles.wall;
+            default: return styles.player;
         }
     };
 
@@ -50,13 +52,11 @@ export function Tile({type, player, turnPlayer, movable, jumpable, onClick, play
         return onClick();
     }
 
-    if (! isTilePlayer(type))
-        return (
-            <button className={classes.join(" ")} onClick={onClick}><span className={classMap(type)}></span></button>
-        );
     return (
-        <button className={classes.join(" ")} onClick={onClickAndAnimate}>
-            <PlayerAnimation type={type as Player} playScore={tilePlayScore} />
+        <button className={classes.join(" ")} onClick={onClickAndAnimate} style={style}>
+            <span className={classMap(type)}>
+            <Character type={type} playScore={tilePlayScore} />
+            </span>
         </button>
     );
 }

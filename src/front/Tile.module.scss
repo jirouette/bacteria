@@ -4,22 +4,32 @@
     padding: 0;
     margin: 0;
     border: 0;
+    display: block;
+    position: fixed;
 }
 
 .wall {
     background-color: black;
     display: block;
-    width: 58.5px;
-    height: 69px;
+    width: 100%;
+    height: 100%;
     margin: auto;
 }
 
 .empty {
     background-color: beige;
     display: block;
-    width: 58.5px;
-    height: 69px;
+    width: 100%;
+    height: 100%;
     margin: auto;
+}
+
+.player {
+    display: block;
+    margin: auto;
+    width: 100px;
+    height: 100px;
+    padding-top: 10%;
 }
 
 .playable {

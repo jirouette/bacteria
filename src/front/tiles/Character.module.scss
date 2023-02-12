@@ -1,0 +1,39 @@
+.appearing {
+    width: 60px;
+    height: 70px;
+    animation: growing 0.5s 0s 1;
+}
+
+.disappearing {
+    width: 0px;
+    height: 0px;
+    animation: leaving 0.5s 0s 1;
+    position: relative;
+}
+
+.transitionAnimationOut {
+    animation: transitionAnimationOut 1s steps(1, end) 0s 1 normal forwards;
+}
+
+.transitionSpriteIn {
+    opacity: 0;
+    animation: transitionSpriteIn 1s steps(1, end) 0s 1 normal forwards;
+}
+
+@keyframes growing {
+    from { width: 0px; height: 0px; }
+    to { width: 60px; height: 70px; }
+}
+
+@keyframes leaving {
+    from { width: 60px; height: 70px; top: 0px; }
+    to { width: 0px; height: 0px; top: 70px; }
+}
+
+@keyframes transitionAnimationOut {
+    to { opacity: 0; }
+}
+
+@keyframes transitionSpriteIn {
+    to { opacity: 1; }
+}

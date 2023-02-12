@@ -9,9 +9,10 @@ import P2 from './assets/P2.png';
 interface Props {
     type: Player;
     playScore: number;
+    className?: string;
 }
 
-export function PlayerAnimation({type, playScore}: Props) {
+export function IdleCharacter({type, playScore, className}: Props) {
     const isPlayerA = () => { return type == TileType.PLAYER_A; };
     const NB_SPRITES = 37;
     const SPRITE_WIDTH = (isPlayerA() && 234) || 226;
@@ -26,7 +27,7 @@ export function PlayerAnimation({type, playScore}: Props) {
     keyframes.push(...Array(NB_SPRITES * animationDelay).fill("0 0"));
 
     return (
-        <svg width="60" height="70" viewBox={viewBox} preserveAspectRatio="none">
+        <svg width="60" height="70" viewBox={viewBox} preserveAspectRatio="none" className={className}>
             <image
                 href={isPlayerA() && P1 || P2}
                 x="0"
