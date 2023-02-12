@@ -60,7 +60,7 @@ export function Character({type, playScore}: Props) {
     }
     if ([Animation.PLAYER_A_TO_B, Animation.PLAYER_B_TO_A].includes(animation)) {
         return (
-            <TransitionCharacter type={type as Player} playScore={playScore} />
+            <TransitionCharacter key={type} type={type as Player} playScore={playScore} />
         );
     }
 
