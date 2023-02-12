@@ -4,12 +4,15 @@
     padding: 0;
     margin: 0;
     border: 0;
-    display: block;
-    position: fixed;
+    float: left;
+    background-color: transparent;
 }
 
 .wall {
-    background-color: black;
+    background-image: url('tiles/assets/wall.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position-y: 50%;
     display: block;
     width: 100%;
     height: 100%;
@@ -17,7 +20,6 @@
 }
 
 .empty {
-    background-color: beige;
     display: block;
     width: 100%;
     height: 100%;
@@ -30,6 +32,10 @@
     width: 100px;
     height: 100px;
     padding-top: 10%;
+    background-image: url('tiles/assets/shadow.png');
+    background-size: 50%;
+    background-repeat: no-repeat;
+    background-position: 50% 85%;
 }
 
 .playable {

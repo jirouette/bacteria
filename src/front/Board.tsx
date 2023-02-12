@@ -45,7 +45,7 @@ export function Board({player, turnPlayer, rows, play}: Props) {
     }
 
     return (
-        <div id="board">
+        <div className={styles.board}>
             {(rows.map((row, y) => {
                 return <div className={styles.row} key={y}>{row.map((tile, x) => {
                     return (<Tile
