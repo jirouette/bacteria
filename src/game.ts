@@ -2,7 +2,8 @@ export enum TileType {
     EMPTY = 0,
     WALL,
     PLAYER_A,
-    PLAYER_B
+    PLAYER_B,
+    PLAYER_UNDEFINED
 };
 
 export type Position = {
@@ -16,6 +17,7 @@ export type Move = null | {
 };
 
 export type Player = TileType.PLAYER_A|TileType.PLAYER_B;
+export type AnyPlayer = Player|TileType.PLAYER_UNDEFINED;
 
 export function isTilePlayer(tile: TileType): boolean {
     return tile == TileType.PLAYER_A || tile == TileType.PLAYER_B;
@@ -42,6 +44,14 @@ export class Board extends Array<Array<TileType>>
         }
     }
 
+    toString(): string {
+        let sequence = "";
+        for (const layer of this) {
+            sequence += layer.join("");
+        }
+        return sequence;
+    }
+
     isOnBoard(point: Position): boolean {
         if (point.x % 1 !== 0 || point.y % 1 !== 0) {
             return false; // not an integer
@@ -58,6 +68,13 @@ export class Board extends Array<Array<TileType>>
     isAPlayerTile(position: Position): boolean {
         let tile = this[position.y][position.x];
         return tile == TileType.PLAYER_A || tile == TileType.PLAYER_B;
+    }
+
+    get(point: Position): TileType {
+        if (! this.isOnBoard(point)) {
+            return TileType.WALL;
+        }
+        return this[point.y][point.x];
     }
 
     isLegalMove(move: Move): boolean {

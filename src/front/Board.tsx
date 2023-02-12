@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { Board as GameBoard, isCloning, isJumping, Move, Player, Position, TileType } from '../game';
+import { AnyPlayer, Board as GameBoard, isCloning, isJumping, isTilePlayer, Move, Position, TileType } from '../game';
 import { Tile } from "./Tile";
 // @ts-ignore
 import styles from "./Board.module.scss";
 
 interface Props {
-    player: Player|null;
-    turnPlayer: Player|null;
+    player: AnyPlayer|null;
+    turnPlayer: AnyPlayer|null;
     rows: GameBoard;
     play: (move: Move) => void;
 }
@@ -18,10 +18,10 @@ export function Board({player, turnPlayer, rows, play}: Props) {
         if (player !== turnPlayer) {
             return false;
         }
-        if (selectedTile === null && rows[y][x] !== player) {
+        if (selectedTile === null && player !== rows[y][x] && player !== TileType.PLAYER_UNDEFINED) {
             return false;
         }
-        if (rows[y][x] === player) {
+        if (player === rows[y][x] || (isTilePlayer(rows[y][x]) && player === TileType.PLAYER_UNDEFINED)) {
             selectTile({x, y});
             return true;
         }

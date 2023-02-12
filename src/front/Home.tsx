@@ -33,6 +33,8 @@ export function Home() {
         <div>
             <h1>Bacteria</h1>
             <button onClick={() => {client.emit('createGame');}} disabled={!isConnected}>Create game</button>
+            <button onClick={() => {navigate('/game');}}>Offline game</button>
+            <button onClick={() => {navigate('/game/200213003');}}>Example game</button>
         </div>
     );
 }

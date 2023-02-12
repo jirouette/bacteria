@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import { Player, TileType } from "../game";
+import { AnyPlayer, isTilePlayer, TileType } from "../game";
 import { Character } from "./tiles/Character";
 // @ts-ignore
 import styles from "./Tile.module.scss";
 
 interface Props {
     type: TileType;
-    player: Player|null;
-    turnPlayer: Player|null;
+    player: AnyPlayer|null;
+    turnPlayer: AnyPlayer|null;
     movable: boolean|null;
     jumpable: boolean|null;
     onClick: () => boolean;
@@ -34,7 +34,7 @@ export function Tile({type, player, turnPlayer, movable, jumpable, onClick, play
 
     let classes = [styles.tile];
     if (player == turnPlayer) {
-        if (type == player) {
+        if (type == player || (player == TileType.PLAYER_UNDEFINED && isTilePlayer(type))) {
             classes.push(styles.playable);
         }
         else if (type == TileType.EMPTY && movable) {
@@ -47,6 +47,9 @@ export function Tile({type, player, turnPlayer, movable, jumpable, onClick, play
 
     const onClickAndAnimate = () => {
         if (player == turnPlayer && type == player) {
+            setPlayScore(playScore);
+        }
+        if (player == turnPlayer && player == TileType.PLAYER_UNDEFINED && isTilePlayer(type)) {
             setPlayScore(playScore);
         }
         return onClick();
