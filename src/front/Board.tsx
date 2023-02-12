@@ -1,38 +1,27 @@
-import React, { useEffect, useState } from "react";
-import { client } from './client';
+import React, { useState } from "react";
 import { Board as GameBoard, isCloning, isJumping, Move, Player, Position, TileType } from '../game';
 import { Tile } from "./Tile";
 // @ts-ignore
 import styles from "./Board.module.scss";
 
-export function Board() {
-    const [board, setBoard] = useState(new GameBoard);
-    const [turnPlayer, setTurnPlayer] = useState<Player|null>(null);
-    const [player, setPlayer] = useState<Player|null>(null);
+interface Props {
+    player: Player|null;
+    turnPlayer: Player|null;
+    rows: GameBoard;
+    play: (move: Move) => void;
+}
+
+export function Board({player, turnPlayer, rows, play}: Props) {
     const [selectedTile, selectTile] = useState<Position|null>(null);
-
-    const onGameJoined = (newBoard: GameBoard, _: Player, newPlayer: Player|null) => {
-        setBoard(new GameBoard(...newBoard));
-        setPlayer(newPlayer);
-    };
-
-    const onTurnChange = (newTurnPlayer: Player) => {
-        setTurnPlayer(newTurnPlayer);
-    };
-
-    const onMove = (move: Move) => {
-        board.applyMove(move);
-        setBoard(new GameBoard(...board)); 
-    }
 
     const onClick = (x: number, y: number) => {
         if (player !== turnPlayer) {
             return false;
         }
-        if (selectedTile === null && board[y][x] !== player) {
+        if (selectedTile === null && rows[y][x] !== player) {
             return false;
         }
-        if (board[y][x] === player) {
+        if (rows[y][x] === player) {
             selectTile({x, y});
             return true;
         }
@@ -40,7 +29,7 @@ export function Board() {
         if (confirmedSelectedTile.x == x && confirmedSelectedTile.y == y) {
             return true;
         }
-        if (board[y][x] !== TileType.EMPTY) {
+        if (rows[y][x] !== TileType.EMPTY) {
             return false;
         }
 
@@ -50,26 +39,14 @@ export function Board() {
             return false;
         }
 
-        client.emit('applyMove', move);
+        play(move);
         selectTile(null);
         return true;
     }
 
-    useEffect(() => {
-        client.on('gameJoined', onGameJoined);
-        client.on('turnChange', onTurnChange);
-        client.on('applyMove', onMove);
-
-        return () => {
-            client.off('gameJoined', onGameJoined);
-            client.off('turnChange', onTurnChange);
-            client.off('applyMove', onMove);
-        }
-    }, [board]);
-
     return (
         <div id="board">
-            {(board.map((row, y) => {
+            {(rows.map((row, y) => {
                 return <div className={styles.row} key={y}>{row.map((tile, x) => {
                     return (<Tile
                         key={`${x}-${y}`}
@@ -79,7 +56,7 @@ export function Board() {
                         movable={selectedTile && isCloning({origin: selectedTile, destination: {x, y}})}
                         jumpable={selectedTile && isJumping({origin: selectedTile, destination: {x, y}})}
                         onClick={() => {return onClick(x, y);}}
-                        playScore={board.nbPlayPossible({x, y})}
+                        playScore={rows.nbPlayPossible({x, y})}
                         style={{left: `${x*100}px`}}
                     />);
                 })}</div>

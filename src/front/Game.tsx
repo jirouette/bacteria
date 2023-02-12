@@ -1,36 +1,49 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import { client } from './client';
+import { Board as GameBoard, Move, Player } from '../game';
 import { Board } from "./Board";
 
 export function Game() {
-    const { gameId } = useParams<{ gameId: string }>();
-    const [isConnected, setConnectedStatus] = useState(client.connected);
+    const [board, setBoard] = useState(new GameBoard);
+    const [turnPlayer, setTurnPlayer] = useState<Player|null>(null);
+    const [player, setPlayer] = useState<Player|null>(null);
 
-    const onConnectionEvent = () => {
-        setConnectedStatus(client.connected);
+    const onGameJoined = (newBoard: GameBoard, _: Player, newPlayer: Player|null) => {
+        setBoard(new GameBoard(...newBoard));
+        setPlayer(newPlayer);
     };
 
-    const onConnect = () => {
-        client.emit('joinGame', gameId);
+    const onTurnChange = (newTurnPlayer: Player) => {
+        setTurnPlayer(newTurnPlayer);
+    };
+
+    const onMove = (move: Move) => {
+        board.applyMove(move);
+        setBoard(new GameBoard(...board)); 
+    }
+
+    const play = (move: Move) => {
+        client.emit('applyMove', move);
     }
 
     useEffect(() => {
-        if (isConnected) {
-            onConnect();
-        } else {
-            client.once('connect', onConnect);
-        }
-        client.on('connect', onConnectionEvent);
-        client.on('disconnect', onConnectionEvent);
+        client.on('gameJoined', onGameJoined);
+        client.on('turnChange', onTurnChange);
+        client.on('applyMove', onMove);
 
         return () => {
-            client.off('connect', onConnectionEvent);
-            client.off('disconnect', onConnectionEvent);
+            client.off('gameJoined', onGameJoined);
+            client.off('turnChange', onTurnChange);
+            client.off('applyMove', onMove);
         }
-    }, []);
+    }, [board]);
 
     return (
-        <div>Game! {gameId} <Board /></div>
+        <Board
+            player={player}
+            turnPlayer={turnPlayer}
+            rows={board}
+            play={play}
+        />
     );
 }
