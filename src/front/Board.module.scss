@@ -6,9 +6,7 @@
 .board {
     background: rgb(178,142,53);
     background: linear-gradient(0deg, rgba(178,142,53,1) 0%, rgba(214,177,92,1) 100%);
-    position: absolute;
-    top: 10%;
-    left: 25%;
+    margin: auto;
 
     border: 5px solid white;
     border-radius: 3% 3% 5% 5%;

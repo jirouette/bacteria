@@ -1,0 +1,25 @@
+@import 'buttons.module.scss';
+
+@font-face {
+    font-family: "Chimboz Heavy";
+    src: url('tiles/assets/chimbozheavy.woff') format("woff"),
+    url('tiles/assets/chimbozheavy.woff2') format("woff2");
+}
+
+.Home h1 {
+    color: white;
+    font-family: "Chimboz Heavy";
+    text-align: center;
+    font-size: 130px;
+    -webkit-text-stroke: 5px black;
+}
+
+.Home menu {
+    text-align: center;
+}
+
+.Home menu button {
+    @extend .button;
+    margin-right: 3%;
+    margin-left: 3%;
+}

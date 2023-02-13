@@ -2,7 +2,11 @@ import React, { useEffect, useState } from "react";
 import { client } from './client';
 import { Board as GameBoard, Move, Player } from '../game';
 import { Board } from "./Board";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { Sound } from "./Sound";
+import { Score } from "./Score";
+// @ts-ignore
+import styles from "./buttons.module.scss";
 
 export function OnlineGame() {
     const { gameId } = useParams<{ gameId: string }>();
@@ -10,6 +14,8 @@ export function OnlineGame() {
     const [board, setBoard] = useState(new GameBoard);
     const [turnPlayer, setTurnPlayer] = useState<Player|null>(null);
     const [player, setPlayer] = useState<Player|null>(null);
+    const [lastMove, setLastMove] = useState<Move>(null);
+    const navigate = useNavigate();
 
     const onConnectionEvent = () => {
         setConnectedStatus(client.connected);
@@ -30,6 +36,7 @@ export function OnlineGame() {
 
     const onMove = (move: Move) => {
         board.applyMove(move);
+        setLastMove(move);
         setBoard(new GameBoard(...board)); 
     }
 
@@ -61,11 +68,18 @@ export function OnlineGame() {
     }, [board]);
 
     return (
-        <Board
-            player={player}
-            turnPlayer={turnPlayer}
-            rows={board}
-            play={play}
-        />
+        <div>
+            <Score board={board} />
+            <Board
+                player={player}
+                turnPlayer={turnPlayer}
+                rows={board}
+                play={play}
+            />
+            <Sound board={board} move={lastMove} />
+            <button className={styles.goback} onClick={() => { navigate('/');}}>
+                Quit
+            </button>
+        </div>
     );
 }

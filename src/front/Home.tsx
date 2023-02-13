@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { client } from './client';
 import React from 'react';
+// @ts-ignore
+import styles from "./Home.module.scss";
 
 export function Home() {
     const [isConnected, setConnectedStatus] = useState(client.connected);
@@ -30,11 +32,13 @@ export function Home() {
     }, []);
 
     return (
-        <div>
-            <h1>Bacteria</h1>
-            <button onClick={() => {client.emit('createGame');}} disabled={!isConnected}>Create game</button>
-            <button onClick={() => {navigate('/game');}}>Offline game</button>
-            <button onClick={() => {navigate('/game/200213003');}}>Example game</button>
+        <div className={styles.Home}>
+            <h1 className={styles.title}>BACTERIA</h1>
+            <menu>
+                <button onClick={() => {client.emit('createGame');}} disabled={!isConnected}>Create game</button>
+                <button onClick={() => {navigate('/game');}}>Offline game</button>
+                <button onClick={() => {navigate('/game/200213003');}}>Example game</button>
+            </menu>
         </div>
     );
 }

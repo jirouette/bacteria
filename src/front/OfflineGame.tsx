@@ -4,6 +4,9 @@ import { Board } from "./Board";
 import { parseBoard, randomBoard } from '../formats';
 import { useNavigate, useParams } from "react-router-dom";
 import { Sound } from "./Sound";
+import { Score } from "./Score";
+// @ts-ignore
+import styles from "./buttons.module.scss";
 
 const randomPlayer = () => {
     return [TileType.PLAYER_A, TileType.PLAYER_B][Math.floor(Math.random() * 2)] as Player;
@@ -56,6 +59,7 @@ export function OfflineGame({ board }: Props) {
 
     return (
         <div>
+            <Score board={gameBoard} />
             <Board
                 player={turnPlayer}
                 turnPlayer={turnPlayer}
@@ -63,6 +67,9 @@ export function OfflineGame({ board }: Props) {
                 play={play}
             />
             <Sound board={gameBoard} move={lastMove} />
+            <button className={styles.goback} onClick={() => { navigate('/');}}>
+                Go back
+            </button>
         </div>
     );
 }
