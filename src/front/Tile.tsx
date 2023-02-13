@@ -3,6 +3,7 @@ import { AnyPlayer, isTilePlayer, TileType } from "../game";
 import { Character } from "./tiles/Character";
 // @ts-ignore
 import styles from "./Tile.module.scss";
+import { click } from "./Sound";
 
 interface Props {
     type: TileType;
@@ -48,9 +49,11 @@ export function Tile({type, player, turnPlayer, movable, jumpable, onClick, play
     const onClickAndAnimate = () => {
         if (player == turnPlayer && type == player) {
             setPlayScore(playScore);
+            click.play();
         }
         if (player == turnPlayer && player == TileType.PLAYER_UNDEFINED && isTilePlayer(type)) {
             setPlayScore(playScore);
+            click.play();
         }
         return onClick();
     }

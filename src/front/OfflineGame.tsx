@@ -3,6 +3,7 @@ import { AnyPlayer, Board as GameBoard, isTilePlayer, Move, Player, TileType } f
 import { Board } from "./Board";
 import { parseBoard, randomBoard } from '../formats';
 import { useNavigate, useParams } from "react-router-dom";
+import { Sound } from "./Sound";
 
 const randomPlayer = () => {
     return [TileType.PLAYER_A, TileType.PLAYER_B][Math.floor(Math.random() * 2)] as Player;
@@ -31,6 +32,7 @@ export function OfflineGame({ board }: Props) {
     const { tiles, player } = useParams<{ tiles?: string, player?: string }>();
     const [gameBoard] = useState(board || (tiles && parseBoard(tiles)) || randomBoard());
     const [turnPlayer, setTurnPlayer] = useState<AnyPlayer>(firstPlayer(player));
+    const [lastMove, setLastMove] = useState<Move>(null);
     const navigate = useNavigate();
 
     const play = (move: Move) => {
@@ -40,6 +42,7 @@ export function OfflineGame({ board }: Props) {
         if (! gameBoard.applyMove(move)) {
             return;
         }
+        setLastMove(move);
         const player = gameBoard.get(move.destination);
         if (! isTilePlayer(player)) {
             return;
@@ -52,11 +55,14 @@ export function OfflineGame({ board }: Props) {
     }
 
     return (
-        <Board
-            player={turnPlayer}
-            turnPlayer={turnPlayer}
-            rows={gameBoard}
-            play={play}
-        />
+        <div>
+            <Board
+                player={turnPlayer}
+                turnPlayer={turnPlayer}
+                rows={gameBoard}
+                play={play}
+            />
+            <Sound board={gameBoard} move={lastMove} />
+        </div>
     );
 }

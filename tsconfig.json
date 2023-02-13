@@ -26,6 +26,8 @@
     "include": [
       "./src/**/*.ts",
       "./src/**/*.css",
-      "./src/**/*.png"
+      "./src/**/*.png",
+      "./src/**/*.wav",
+      "./src/**/*.mp3",
     ],
 }
