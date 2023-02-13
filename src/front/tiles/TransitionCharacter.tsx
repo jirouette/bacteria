@@ -8,11 +8,12 @@ import styles from "./Character.module.scss";
 interface Props {
     type: Player;
     playScore: number;
+    className?: string;
 }
 
-export function TransitionCharacter({type, playScore}: Props) {
+export function TransitionCharacter({type, playScore, className}: Props) {
     return (
-        <svg>
+        <svg className={className}>
             <TransitionPart
                 type={type}
                 part={TileType.PLAYER_A}

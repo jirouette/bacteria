@@ -2,6 +2,7 @@
     width: 60px;
     height: 70px;
     animation: growing 0.5s 0s 1;
+    position: relative;
 }
 
 .disappearing {
@@ -9,6 +10,11 @@
     height: 0px;
     animation: leaving 0.5s 0s 1;
     position: relative;
+}
+
+.transforming {
+    width: 60px;
+    height: 100px;
 }
 
 .transitionAnimationOut {
@@ -21,8 +27,8 @@
 }
 
 @keyframes growing {
-    from { width: 0px; height: 0px; }
-    to { width: 60px; height: 70px; }
+    from { width: 0px; height: 0px; top: 70px; }
+    to { width: 60px; height: 70px; top: 0px; }
 }
 
 @keyframes leaving {
