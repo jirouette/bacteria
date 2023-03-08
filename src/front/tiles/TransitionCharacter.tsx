@@ -17,12 +17,12 @@ export function TransitionCharacter({type, playScore, className}: Props) {
             <TransitionPart
                 type={type}
                 part={TileType.PLAYER_A}
-                className={styles.transitionAnimationOut} 
+                className={styles.transitionAnimationOut}
             />
             <TransitionPart
                 type={type}
                 part={TileType.PLAYER_B}
-                className={styles.transitionAnimationOut} 
+                className={styles.transitionAnimationOut}
             />
             <IdleCharacter type={type} playScore={playScore} className={styles.transitionSpriteIn} />
         </svg>
