@@ -1,0 +1,100 @@
+@import 'buttons.module.scss';
+
+.result {
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    padding-bottom: 5%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Chimboz Heavy";
+    color: white;
+    font-size: 100px;
+    z-index: 1;
+    opacity: 0;
+    animation: result 1.5s 0.5s 1 forwards;
+}
+
+.return {
+    @extend .goback;
+    z-index: 1;
+    animation: result 1.5s 0.5s 1 forwards;
+    opacity: 0;
+}
+
+.end {
+    width: 300%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    margin: 0;
+    padding: 0;
+    vertical-align: auto;
+    color: white;
+    font-family: "Chimboz Heavy";
+    text-align: center;
+    font-size: 150px;
+    display: flex;
+    align-items: center;
+}
+
+.playerA {
+    background-color: #ff3300;
+    transform: skew(20deg);
+    left: -500%;
+    justify-content: right;
+    animation: playerAEnd 1s 0.5s 1 forwards;
+    animation-timing-function: cubic-bezier(0,1.84,0,.45);
+}
+
+.characterBubble {
+    width: 230px;
+    height: 230px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: white;
+}
+
+.character {
+    width: 120px;
+    height: 140px;
+}
+
+.playerAcontent {
+    transform: skew(-20deg);
+    padding: 5%;
+}
+
+.playerB {
+    background-color: #00cc00;
+    transform: skew(20deg);
+    left: 300%;
+    justify-content: left;
+    animation: playerBEnd 1s 0.5s 1 forwards;
+    animation-timing-function: cubic-bezier(0,1.84,0,.45);
+}
+
+.playerBcontent {
+    transform: skew(-20deg);
+    padding: 5%;
+}
+
+@keyframes playerAEnd {
+    from { left: -500%; }
+    to { left: -250%; }
+}
+
+@keyframes playerBEnd {
+    from { left: 300%; }
+    to { left: 50%; }
+}
+
+@keyframes result {
+    0% { opacity: 0; }
+    66% { opacity: 0; }
+    100% { opacity: 1; }
+}

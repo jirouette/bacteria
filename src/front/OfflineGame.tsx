@@ -7,12 +7,13 @@ import { Sound } from "./Sound";
 import { Score } from "./Score";
 // @ts-ignore
 import styles from "./buttons.module.scss";
+import { End } from "./End";
 
 const randomPlayer = () => {
     return [TileType.PLAYER_A, TileType.PLAYER_B][Math.floor(Math.random() * 2)] as Player;
 }
 
-const opponentOf = (player: Player) => {
+export const opponentOf = (player: Player) => {
     return player == TileType.PLAYER_A ? TileType.PLAYER_B : TileType.PLAYER_A;
 }
 
@@ -36,6 +37,7 @@ export function OfflineGame({ board }: Props) {
     const [gameBoard] = useState(board || (tiles && parseBoard(tiles)) || randomBoard());
     const [turnPlayer, setTurnPlayer] = useState<AnyPlayer>(firstPlayer(player));
     const [lastMove, setLastMove] = useState<Move>(null);
+    const [isFinished, setIsFinished] = useState<boolean>(false);
     const navigate = useNavigate();
 
     const play = (move: Move) => {
@@ -51,6 +53,9 @@ export function OfflineGame({ board }: Props) {
             return;
         }
         const opponent = opponentOf(player as Player);
+        if (! gameBoard.canAPlayerStillPlay(opponent)) {
+            setIsFinished(true);
+        }
         setTurnPlayer(opponent);
         if (tiles) {
             navigate(`/game/${gameBoard}/${opponent}`);
@@ -58,7 +63,7 @@ export function OfflineGame({ board }: Props) {
     }
 
     return (
-        <div>
+        <>
             <Score board={gameBoard} />
             <Board
                 player={turnPlayer}
@@ -70,6 +75,7 @@ export function OfflineGame({ board }: Props) {
             <button className={styles.goback} onClick={() => { navigate('/');}}>
                 Go back
             </button>
-        </div>
+            {isFinished && (<End board={gameBoard} />)}
+        </>
     );
 }

@@ -23,3 +23,8 @@
     margin-right: 3%;
     margin-left: 3%;
 }
+
+*::selection {
+    color: white;
+    background-color: #ff3399;
+}

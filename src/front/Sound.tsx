@@ -20,6 +20,8 @@ import P2_2mp3 from "./tiles/assets/P2_2.mp3";
 import P2_3mp3 from "./tiles/assets/P2_3.mp3";
 // @ts-ignore
 import clickmp3 from "./tiles/assets/click.mp3";
+// @ts-ignore
+import endmp3 from "./tiles/assets/end.mp3";
 
 interface Props {
     board: GameBoard;
@@ -55,8 +57,9 @@ export const P2_1 = new Audio(P2_1mp3);
 export const P2_2 = new Audio(P2_2mp3);
 export const P2_3 = new Audio(P2_3mp3);
 export const click = new Audio(clickmp3);
+export const end = new Audio(endmp3);
 
-const allSounds = [copy, jump, P1_1, P1_2, P1_3, P2_1, P2_2, P2_3, click];
+const allSounds = [copy, jump, P1_1, P1_2, P1_3, P2_1, P2_2, P2_3, click, end];
 
 let isMuted = false;
 
