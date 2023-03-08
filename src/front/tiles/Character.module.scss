@@ -2,6 +2,7 @@
     width: 60px;
     height: 70px;
     animation: growing 0.5s 0s 1;
+    animation-timing-function: cubic-bezier(.7,1.04,.62,1.67);
     position: relative;
 }
 

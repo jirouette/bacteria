@@ -16,7 +16,7 @@
     border-bottom-color: #b7005b;
 }
 
-.button:active :not(:disabled) {
+.button:active:not(:disabled) {
     border: 5px solid #b7005b;
     border-right-color: #e589b7;
     border-bottom-color: #e589b7;
