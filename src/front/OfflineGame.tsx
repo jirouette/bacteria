@@ -54,6 +54,7 @@ export function OfflineGame({ board }: Props) {
         }
         const opponent = opponentOf(player as Player);
         if (! gameBoard.canAPlayerStillPlay(opponent)) {
+            gameBoard.fillAs(player as Player);
             setIsFinished(true);
         }
         setTurnPlayer(opponent);

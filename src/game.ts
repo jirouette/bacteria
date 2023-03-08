@@ -130,6 +130,16 @@ export class Board extends Array<Array<TileType>>
         return true; // move applied
     }
 
+    fillAs(player: Player) {
+        for (let y = 0 ; y < this.length ; ++y) {
+            for (let x = 0 ; x < this[y].length ; ++x) {
+                if (this[y][x] == TileType.EMPTY) {
+                    this[y][x] = player;
+                }
+            }
+        }
+    }
+
     nbPlayPossible(pos: Position): number {
         let nbPlay = 0;
         for (let moveX = pos.x - 2 ; moveX <= (pos.x + 2) ; ++moveX) {
