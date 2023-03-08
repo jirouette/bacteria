@@ -32,6 +32,7 @@ export function Tile({type, player, turnPlayer, movable, jumpable, onClick, play
             default: return styles.player;
         }
     };
+    const hasNotJoinedYet = turnPlayer === null && type !== player && isTilePlayer(type) ? styles.hasNotJoinedYet : "";
 
     let classes = [styles.tile];
     if (player == turnPlayer) {
@@ -60,7 +61,7 @@ export function Tile({type, player, turnPlayer, movable, jumpable, onClick, play
 
     return (
         <button className={classes.join(" ")} onClick={onClickAndAnimate} style={style}>
-            <span className={classMap(type)}>
+            <span className={classMap(type) + " " + hasNotJoinedYet}>
             <Character type={type} playScore={tilePlayScore} />
             </span>
         </button>

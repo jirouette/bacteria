@@ -42,6 +42,10 @@
     background-position: 50% 85%;
 }
 
+.hasNotJoinedYet {
+    filter: grayscale(1);
+}
+
 .playable {
     cursor: pointer;
 }
