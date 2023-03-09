@@ -23,6 +23,10 @@ export function isTilePlayer(tile: TileType): boolean {
     return tile == TileType.PLAYER_A || tile == TileType.PLAYER_B;
 }
 
+export const opponentOf = (player: Player) => {
+    return player == TileType.PLAYER_A ? TileType.PLAYER_B : TileType.PLAYER_A;
+}
+
 export function isCloning(move: Move): boolean {
     return move !== null && Math.abs(move.origin.y - move.destination.y) <= 1 && Math.abs(move.origin.x - move.destination.x) <= 1;
 }

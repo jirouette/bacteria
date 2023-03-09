@@ -46,8 +46,8 @@ io.on('connection', (socket) => {
             return;
         }
         io.in(gameId).emit("applyMove", move);
-        if (! game.isFinished()) {
-            io.in(gameId).emit("turnChange", game.turn_player);
+        io.in(gameId).emit("turnChange", game.turn_player);
+        if (game.board.canAPlayerStillPlay(game.turn_player)) {
             return;
         }
         let scores = game.scores();

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { client } from './client';
-import { Board as GameBoard, Move, Player } from '../game';
+import { Board as GameBoard, Move, opponentOf, Player } from '../game';
 import { Board } from "./Board";
 import { useNavigate, useParams } from "react-router-dom";
 import { Sound } from "./Sound";
 import { Score } from "./Score";
+import { End } from "./End";
 // @ts-ignore
 import styles from "./buttons.module.scss";
 
@@ -37,7 +38,7 @@ export function OnlineGame() {
     const onMove = (move: Move) => {
         board.applyMove(move);
         setLastMove(move);
-        setBoard(new GameBoard(...board)); 
+        setBoard(new GameBoard(...board));
     }
 
     const play = (move: Move) => {
@@ -67,8 +68,13 @@ export function OnlineGame() {
         }
     }, [board]);
 
+    const finished = turnPlayer !== null && ! board.canAPlayerStillPlay(turnPlayer);
+    if (finished) {
+        board.fillAs(opponentOf(turnPlayer));
+    }
+
     return (
-        <div>
+        <>
             <Score board={board} />
             <Board
                 player={player}
@@ -80,6 +86,7 @@ export function OnlineGame() {
             <button className={styles.goback} onClick={() => { navigate('/');}}>
                 Quit
             </button>
-        </div>
+            {finished && (<End board={board} />)}
+        </>
     );
 }
