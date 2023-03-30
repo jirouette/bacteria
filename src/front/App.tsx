@@ -5,6 +5,7 @@ import { OfflineGame } from './OfflineGame';
 import { OnlineGame } from './OnlineGame';
 // @ts-ignore
 import styles from "./App.module.scss";
+import { IframeGame } from './IframeGame';
 
 export default function App() {
   return (
@@ -13,6 +14,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/game/:tiles?/:player?" element={<OfflineGame />} />
+          <Route path="/iframe/:tiles?/player?" element={<IframeGame />} />
           <Route path="/:gameId?" element={<OnlineGame />} />
         </Routes>
       </BrowserRouter>

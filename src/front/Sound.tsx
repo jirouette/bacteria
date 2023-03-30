@@ -61,6 +61,12 @@ export const end = new Audio(endmp3);
 
 const allSounds = [copy, jump, P1_1, P1_2, P1_3, P2_1, P2_2, P2_3, click, end];
 
+export function muteAll() {
+    allSounds.map((sound) => {
+        sound.muted = true;
+    });
+}
+
 let isMuted = false;
 
 export function Sound({ board, move }: Props) {

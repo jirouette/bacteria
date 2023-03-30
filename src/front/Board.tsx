@@ -9,9 +9,10 @@ interface Props {
     turnPlayer: AnyPlayer|null;
     rows: GameBoard;
     play: (move: Move) => void;
+    style?: React.CSSProperties;
 }
 
-export function Board({player, turnPlayer, rows, play}: Props) {
+export function Board({player, turnPlayer, rows, play, style}: Props) {
     const [selectedTile, selectTile] = useState<Position|null>(null);
 
     const onClick = (x: number, y: number) => {
@@ -44,8 +45,13 @@ export function Board({player, turnPlayer, rows, play}: Props) {
         return true;
     }
 
+    let boardStyle: React.CSSProperties = {width: `${rows.length*100}px`};
+    if (style !== undefined) {
+        boardStyle = {...boardStyle, ...style}
+    }
+
     return (
-        <div className={styles.board} style={{width: `${rows.length*100}px`}}>
+        <div className={styles.board} style={boardStyle}>
             {(rows.map((row, y) => {
                 return <div className={styles.row} key={y}>{row.map((tile, x) => {
                     return (<Tile
