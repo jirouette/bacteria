@@ -8,7 +8,7 @@ import { randomBoard } from '../formats.js';
 var games: {[key: string]: Game} = {};
 
 const httpServer = createServer();
-const io = new Server<ClientToServerEvents, ServerToClientEvents, {}, SocketData>(httpServer, {cors: {origin: 'http://localhost:3002'}});
+const io = new Server<ClientToServerEvents, ServerToClientEvents, {}, SocketData>(httpServer, {path: '/io'});
 
 io.on('connection', (socket) => {
     console.log("Connection!", socket.id);
